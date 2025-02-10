@@ -1,4 +1,4 @@
-﻿namespace Task_4._01
+namespace Task_4._01
 {
     internal class Program
     {
@@ -20,12 +20,19 @@
                         players.Add(player);
                         Console.WriteLine($"Player {player.Name} with position {player.Position} created.");
                         break;
-
                     case "add_player":
                         Team teamToAdd = teams.FirstOrDefault(x => x.Name == commands[1]);
                         if (teamToAdd != null)
                         {
-                            teamToAdd.add_player(commands[2], commands[3]);
+                            IPlayer playerToAdd = players.FirstOrDefault(x => x.Name == commands[2] && x.Position == commands[3]);
+                            if(playerToAdd != null)
+                            {
+                                teamToAdd.add_player(playerToAdd);
+                            }
+                            else
+                            {
+                                Console.WriteLine("There's no existing such a player.");
+                            }
                         }
                         else
                         {
@@ -47,7 +54,8 @@
                         team = teams.FirstOrDefault(t => t.Name == commands[1]);
                         if (team != null)
                         {
-                            team.SaveLogToFile(commands[2]);
+                            Console.WriteLine("Type of save - txt or excel?:");
+                            team.SaveLogToFile(Console.ReadLine());
                         }
                         else
                         {
@@ -58,7 +66,18 @@
                         Team teamToPrintLog = teams.FirstOrDefault(x => x.Name == commands[1]);
                         if (teamToPrintLog != null)
                         {
-                            teamToPrintLog.PrintLogToConsole();
+                            teamToPrintLog.PrintLogToConsole(commands[0].Split("_").Last());
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Team {commands[1]} does not exist.");
+                        }
+                        break;
+                    case "print_log_excel":
+                        Team teamToPrintLogExcel = teams.FirstOrDefault(x => x.Name == commands[1]);
+                        if (teamToPrintLogExcel != null)
+                        {
+                            teamToPrintLogExcel.PrintLogToConsole(commands[0].Split("_").Last());
                         }
                         else
                         {
