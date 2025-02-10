@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,20 +9,28 @@ namespace Task_4._01
     public class TextLog:ILog
     {
         private StringBuilder logContent;
-        public TextLog()
+        private string filepath;
+        public TextLog(string filepath)
         {
             logContent = new StringBuilder();
+            this.filepath = filepath;
         }
         public void Log(string message)
         {
             logContent.AppendLine(message);
         }
-        public void SaveLog(string filePath)
+        public void SaveLog()
         {
             try
             {
-                File.WriteAllText(filePath, logContent.ToString());
-                Console.WriteLine($"Log saved to {filePath}");
+                using (StreamWriter writer = new StreamWriter(this.filepath))
+                {
+                    foreach (var content in logContent.ToString())
+                    {
+                        writer.Write(content);
+                    }
+                }
+                Console.WriteLine($"Log saved to {this.filepath}");
             }
             catch (Exception ex)
             {
